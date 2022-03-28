@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { collection as fbCollection, getDocs as fbGetDocs } from "firebase/firestore";
+import { collection as fbCollection, doc as fbDoc, getDocs as fbGetDocs, setDoc as fbSetDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCScSxCcCgAf7mV-XlsRiJdjGqp2MMTYRc",
@@ -25,4 +25,8 @@ export const init = () => {
 export const getDocs = async ({ collection }) => {
   const querySnapshot = await fbGetDocs(fbCollection(_db, collection));
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const setDoc = async ({ collection, path, data }) => {
+  return await fbSetDoc(fbDoc(_db, collection, path), data);
 };

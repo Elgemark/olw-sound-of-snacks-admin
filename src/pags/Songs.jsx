@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { init, getDocs } from "../firebase";
+import { getDocs } from "../firebase";
 import styled from "styled-components";
 
 const OrderedList = styled.ol`
   text-align: left;
   li {
-    display: grid;
-    grid-template-columns: 50px 150px 150px;
-    grid-template-rows: auto;
   }
   .num {
     font-weight: bold;
@@ -17,11 +14,17 @@ const OrderedList = styled.ol`
   }
 `;
 
+const ListItem = styled.li`
+  display: grid;
+  grid-template-columns: 50px 150px 150px;
+  grid-template-rows: auto;
+  background-color: ${({ index }) => (index % 2 ? "#fff" : "#eee")};
+`;
+
 const Songs = () => {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
-    init();
     getDocs({ collection: "songs" }).then((res) => {
       setSongs(res);
     });
@@ -31,11 +34,11 @@ const Songs = () => {
     <div>
       <OrderedList>
         {songs.map((song, index) => (
-          <li key={song.id}>
+          <ListItem key={song.id} index={index}>
             <span className="num">{`${index + 1}.`}</span>
             <span className="alias">{song.alias}</span>
             <span className="email">{song.email}</span>
-          </li>
+          </ListItem>
         ))}
       </OrderedList>
     </div>

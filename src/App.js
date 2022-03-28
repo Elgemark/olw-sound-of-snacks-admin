@@ -1,9 +1,15 @@
+import { useEffect } from "react";
 import "./App.css";
 import { Link, Routes, Route } from "react-router-dom";
 import PostSong from "./pags/PostSong";
 import Songs from "./pags/Songs";
+import { init } from "./firebase";
 
 function App() {
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
     <div className="App">
       <nav
