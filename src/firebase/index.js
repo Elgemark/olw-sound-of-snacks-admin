@@ -1,7 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { collection as fbCollection, doc as fbDoc, getDocs as fbGetDocs, setDoc as fbSetDoc } from "firebase/firestore";
+import {
+  collection as fbCollection,
+  doc as fbDoc,
+  getDocs as fbGetDocs,
+  setDoc as fbSetDoc,
+  addDoc as fbAddDoc,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCScSxCcCgAf7mV-XlsRiJdjGqp2MMTYRc",
@@ -29,4 +35,10 @@ export const getDocs = async ({ collection }) => {
 
 export const setDoc = async ({ collection, path, data }) => {
   return await fbSetDoc(fbDoc(_db, collection, path), data);
+};
+
+export const addDoc = async ({ collection, path, data }) => {
+  const test = await fbAddDoc(fbCollection(_db, collection), data);
+  debugger;
+  return test;
 };

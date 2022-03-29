@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import "./App.css";
 import { Link, Routes, Route } from "react-router-dom";
-import PostSong from "./pags/PostSong";
-import Songs from "./pags/Songs";
+import PostSong from "./pages/PostSong";
+import Songs from "./pages/Songs";
 import { init } from "./firebase";
 
 function App() {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { setDoc } from "../firebase";
+import { setDoc, addDoc } from "../firebase";
 
 const Root = styled.div`
   padding: 50px;
@@ -28,7 +28,7 @@ const PostSong = () => {
   const [data, setData] = useState("");
 
   const postData = async () => {
-    const res = await setDoc({ collection: "songs", path: email, data: { email, alias, data } });
+    const res = await addDoc({ collection: "songs", data: { email, alias, data } });
     setAlias("");
     setEmail("");
     setData("");
