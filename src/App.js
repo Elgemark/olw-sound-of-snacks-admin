@@ -7,6 +7,7 @@ import { init } from "./firebase";
 
 function App() {
   useEffect(() => {
+    // init firebase
     init();
   }, []);
 

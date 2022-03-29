@@ -23,7 +23,7 @@ const Buttons = styled.div`
   }
 `;
 
-const SongListItem = styled(({ song, index, checked, onChange, ...rest }) => (
+const SongListItem = styled(({ show = true, song, index, checked, onChange, ...rest }) => (
   <li key={song.id} index={index} {...rest}>
     <input type="checkbox" checked={checked} onChange={onChange} />
     <span className="num">{`${index + 1}.`}</span>
@@ -41,9 +41,18 @@ const SongListItem = styled(({ song, index, checked, onChange, ...rest }) => (
   }
 `;
 
+const RandomSongItem = ({ song, ...rest }) => {
+  if (song) {
+    return <SongListItem song={song} {...rest} />;
+  } else {
+    return <React.Fragment />;
+  }
+};
+
 const Songs = () => {
   const [songs, setSongs] = useState([]);
   const [selectedSongs, setSelectedSongs] = useState([]);
+  const [randomSongIndex, setRandomSongIndex] = useState();
 
   useEffect(() => {
     getDocs({ collection: "songs" }).then((res) => {
@@ -61,6 +70,11 @@ const Songs = () => {
     setSelectedSongs(updatedSongs);
   };
 
+  const onSelectRandomClickHandler = () => {
+    const randomIndex = _.random(0, songs.length - 1);
+    setRandomSongIndex(randomIndex);
+  };
+
   return (
     <div>
       <OrderedList>
@@ -76,9 +90,12 @@ const Songs = () => {
       </OrderedList>
       {/* BUTTONS */}
       <Buttons>
-        {selectedSongs.length ? <button>Delete</button> : undefined}
-        <button>Delete</button>
+        {selectedSongs.length ? <button>DELETE</button> : undefined}
+        <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button>
       </Buttons>
+      <OrderedList>
+        <RandomSongItem song={songs[randomSongIndex]} index={randomSongIndex} />
+      </OrderedList>
     </div>
   );
 };
