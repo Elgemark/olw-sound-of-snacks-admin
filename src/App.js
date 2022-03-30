@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 import { Link, Routes, Route } from "react-router-dom";
 import PostSong from "./pages/PostSong";
@@ -6,10 +7,19 @@ import Songs from "./pages/Songs";
 import { init } from "./firebase";
 
 function App() {
+  const [isInitilized, setIsInitilized] = useState();
+
   useEffect(() => {
     // init firebase
     init();
+    setIsInitilized(true);
   }, []);
+
+  console.log("isInitilized", isInitilized);
+
+  if (!isInitilized) {
+    return "loading...";
+  }
 
   return (
     <div className="App">

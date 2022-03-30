@@ -7,6 +7,7 @@ import {
   getDocs as fbGetDocs,
   setDoc as fbSetDoc,
   addDoc as fbAddDoc,
+  deleteDoc as fbDeleteDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -37,8 +38,10 @@ export const setDoc = async ({ collection, path, data }) => {
   return await fbSetDoc(fbDoc(_db, collection, path), data);
 };
 
-export const addDoc = async ({ collection, path, data }) => {
-  const test = await fbAddDoc(fbCollection(_db, collection), data);
-  debugger;
-  return test;
+export const addDoc = async ({ collection, data }) => {
+  return await fbAddDoc(fbCollection(_db, collection), data);
+};
+
+export const deleteDoc = async ({ collection, path }) => {
+  return await fbDeleteDoc(fbDoc(_db, collection, path));
 };
