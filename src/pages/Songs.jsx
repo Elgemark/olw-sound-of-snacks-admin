@@ -55,20 +55,9 @@ const RandomSongItem = ({ song, ...rest }) => {
   }
 };
 
-const Songs = () => {
-  const [songs, setSongs] = useState([]);
+const Songs = ({ songs, onDelete }) => {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [randomSongIndex, setRandomSongIndex] = useState();
-
-  useEffect(() => {
-    getSongs();
-  }, []);
-
-  const getSongs = () => {
-    getDocs({ collection: "songs" }).then((res) => {
-      setSongs(res);
-    });
-  };
 
   const onListeItemClickHandler = (songId) => {
     const updatedSongs = [...selectedSongs];
@@ -88,8 +77,8 @@ const Songs = () => {
   const onDeleteClickHandler = () => {
     const promises = selectedSongs.map((songId) => deleteDoc({ collection: "songs", path: songId }));
     Promise.all(promises).then(() => {
+      onDelete && onDelete(selectedSongs);
       setSelectedSongs([]);
-      getSongs();
     });
   };
 
