@@ -4,6 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { getDocs } from "../firebase";
 import { orderBy } from "firebase/firestore";
+import SongListItem from "../components/SongListItem";
 
 const _mockSongs = [
   { alias: "test-1", email: "elgemark@gmail.com" },
@@ -36,24 +37,6 @@ const Buttons = styled.div`
   button {
     margin-left: 4px;
     margin-right: 4px;
-  }
-`;
-
-const SongListItem = styled(({ show = true, checkBox = true, song, index, checked, onChange, ...rest }) => (
-  <li key={song.id} index={index} {...rest}>
-    {checkBox && <input type="checkbox" checked={checked} onChange={onChange} />}
-    <span className="num">{`${index + 1}.`}</span>
-    <span className="alias">{song.alias}</span>
-    <span className="email">{song.email}</span>
-  </li>
-))`
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: 50px 50px 150px 150px;
-  grid-template-rows: auto;
-  background-color: ${({ index, color }) => (color ? color : index % 2 ? "#fff" : "#eee")};
-  &:hover {
-    background-color: #ffeeff;
   }
 `;
 
@@ -121,23 +104,24 @@ const Songs = ({ limit = 2 }) => {
       </OrderedList>
       {/* BUTTONS */}
       <Buttons>
-        {selectedSongs.length ? <button onClick={onDeleteClickHandler}>DELETE</button> : undefined}
-        <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button>
         {skip > 0 && (
           <button
             onClick={() => {
               paginate(limit * -1);
             }}
           >
-            PREVIOUS
+            {"<< PREVIOUS"}
           </button>
         )}
+        {selectedSongs.length ? <button onClick={onDeleteClickHandler}>DELETE</button> : undefined}
+        <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button>
+
         <button
           onClick={() => {
             paginate(limit);
           }}
         >
-          NEXT
+          {"NEXT >>"}
         </button>
       </Buttons>
       {/* RANDOM */}
