@@ -5,30 +5,16 @@ import { Link, Routes, Route } from "react-router-dom";
 import PostSong from "./pages/PostSong";
 import Songs from "./pages/Songs";
 import { init } from "./firebase";
-import { getDocs } from "./firebase";
 import _ from "lodash";
 
 function App() {
   const [isInitilized, setIsInitilized] = useState();
-  const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     // init firebase
     init();
     setIsInitilized(true);
-    // get songs
-    getDocs({ collection: "songs" }).then((res) => {
-      setSongs(res);
-    });
   }, []);
-
-  const onDeleteSongsHandler = (deletedSongIds) => {
-    const updatedSongs = [...songs];
-    _.remove(updatedSongs, (song) => deletedSongIds.includes(song.id));
-    setSongs(updatedSongs);
-  };
-
-  console.log("isInitilized", isInitilized);
 
   if (!isInitilized) {
     return "loading...";
@@ -45,7 +31,7 @@ function App() {
         <Link to="/songs">List songs</Link> | <Link to="/post-song">Post song</Link>
       </nav>
       <Routes>
-        <Route path="songs" element={<Songs songs={songs} onDelete={onDeleteSongsHandler} />} />
+        <Route path="songs" element={<Songs />} />
         <Route path="post-song" element={<PostSong></PostSong>} />
       </Routes>
       ,

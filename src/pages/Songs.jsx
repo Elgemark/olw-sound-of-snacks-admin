@@ -1,7 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { getDocs, deleteDoc } from "../firebase";
+import React, { useState, useEffect } from "react";
+import { deleteDoc } from "../firebase";
 import styled from "styled-components";
 import _ from "lodash";
+import { getDocs } from "../firebase";
+import { orderBy } from "firebase/firestore";
+
+const _mockSongs = [
+  { alias: "test-1", email: "elgemark@gmail.com" },
+  { alias: "test-2", email: "elgemark@gmail.com" },
+  { alias: "test-3", email: "elgemark@gmail.com" },
+  { alias: "test-4", email: "elgemark@gmail.com" },
+  { alias: "test-5", email: "elgemark@gmail.com" },
+];
 
 const Root = styled.div`
   padding: 1rem;
@@ -55,9 +65,24 @@ const RandomSongItem = ({ song, ...rest }) => {
   }
 };
 
-const Songs = ({ songs, onDelete }) => {
+const Songs = ({ limit = 2 }) => {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [randomSongIndex, setRandomSongIndex] = useState();
+  const [songs, setSongs] = useState([]);
+  const [skip, setSkip] = useState(0);
+
+  useEffect(() => {
+    // get songs
+    // getDocs({ collection: "songs", query: [orderBy("createdAt", "asc")] }).then((res) => {
+    getDocs({ collection: "songs" }).then((res) => {
+      setSongs(res);
+    });
+    setSongs(_mockSongs);
+  }, []);
+
+  const paginate = (value) => {
+    setSkip(skip + value);
+  };
 
   const onListeItemClickHandler = (songId) => {
     const updatedSongs = [...selectedSongs];
@@ -77,7 +102,6 @@ const Songs = ({ songs, onDelete }) => {
   const onDeleteClickHandler = () => {
     const promises = selectedSongs.map((songId) => deleteDoc({ collection: "songs", path: songId }));
     Promise.all(promises).then(() => {
-      onDelete && onDelete(selectedSongs);
       setSelectedSongs([]);
     });
   };
@@ -85,7 +109,7 @@ const Songs = ({ songs, onDelete }) => {
   return (
     <Root>
       <OrderedList>
-        {songs.map((song, index) => (
+        {songs.slice(skip, skip + limit).map((song, index) => (
           <SongListItem
             key={song.id}
             song={song}
@@ -99,7 +123,24 @@ const Songs = ({ songs, onDelete }) => {
       <Buttons>
         {selectedSongs.length ? <button onClick={onDeleteClickHandler}>DELETE</button> : undefined}
         <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button>
+        {skip > 0 && (
+          <button
+            onClick={() => {
+              paginate(limit * -1);
+            }}
+          >
+            PREVIOUS
+          </button>
+        )}
+        <button
+          onClick={() => {
+            paginate(limit);
+          }}
+        >
+          NEXT
+        </button>
       </Buttons>
+      {/* RANDOM */}
       <OrderedList>
         <RandomSongItem checkBox={false} color="#eee" song={songs[randomSongIndex]} index={randomSongIndex} />
       </OrderedList>

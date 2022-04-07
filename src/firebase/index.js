@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import {
+  query as fbQuery,
   collection as fbCollection,
   doc as fbDoc,
   getDocs as fbGetDocs,
@@ -29,8 +30,9 @@ export const init = () => {
   return { app: _app, analytics: _analytics, db: _db };
 };
 
-export const getDocs = async ({ collection }) => {
-  const querySnapshot = await fbGetDocs(fbCollection(_db, collection));
+export const getDocs = async ({ collection, query = [] }) => {
+  const _query = fbQuery(fbCollection(_db, collection), ...query);
+  const querySnapshot = await fbGetDocs(_query);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
