@@ -3,16 +3,8 @@ import { deleteDoc } from "../firebase";
 import styled from "styled-components";
 import _ from "lodash";
 import { getDocs } from "../firebase";
-import { orderBy } from "firebase/firestore";
+import { orderBy, limit as fbLimit } from "firebase/firestore";
 import SongListItem from "../components/SongListItem";
-
-const _mockSongs = [
-  { alias: "test-1", email: "elgemark@gmail.com" },
-  { alias: "test-2", email: "elgemark@gmail.com" },
-  { alias: "test-3", email: "elgemark@gmail.com" },
-  { alias: "test-4", email: "elgemark@gmail.com" },
-  { alias: "test-5", email: "elgemark@gmail.com" },
-];
 
 const Root = styled.div`
   padding: 1rem;
@@ -48,7 +40,7 @@ const RandomSongItem = ({ song, ...rest }) => {
   }
 };
 
-const Songs = ({ limit = 2 }) => {
+const Songs = ({ limit = 20 }) => {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [randomSongIndex, setRandomSongIndex] = useState();
   const [songs, setSongs] = useState([]);
@@ -56,11 +48,11 @@ const Songs = ({ limit = 2 }) => {
 
   useEffect(() => {
     // get songs
-    // getDocs({ collection: "songs", query: [orderBy("createdAt", "asc")] }).then((res) => {
-    getDocs({ collection: "songs" }).then((res) => {
+    const query = [fbLimit(limit)];
+    getDocs({ collection: "songs", query }).then((res) => {
+      // getDocs({ collection: "songs" }).then((res) => {
       setSongs(res);
     });
-    setSongs(_mockSongs);
   }, []);
 
   const paginate = (value) => {
@@ -96,7 +88,7 @@ const Songs = ({ limit = 2 }) => {
           <SongListItem
             key={song.id}
             song={song}
-            index={index}
+            index={skip + index}
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}
           />
