@@ -7,6 +7,7 @@ import Songs from "./pages/Songs";
 import { init } from "./firebase";
 import _ from "lodash";
 import Login from "./pages/Login";
+import SelectWinner from "./pages/SelectWinner";
 
 function App() {
   const [initData, setInitData] = useState();
@@ -28,12 +29,17 @@ function App() {
           paddingBottom: "1rem",
         }}
       >
-        <Link to="/songs">List songs</Link> | <Link to="/post-song">Post song</Link>
+        <Link to="/songs">List songs</Link>
+        {" | "}
+        <Link to="/post-song">Post song</Link>
+        {" | "}
+        <Link to="/select-winner">Select winner</Link>
       </nav>
       <Routes>
         <Route path="sign-in" element={<Login uiConfig={initData.uiConfig} />} />
         <Route path="songs" element={<Songs />} />
         <Route path="post-song" element={<PostSong></PostSong>} />
+        <Route path="select-winner" element={<SelectWinner></SelectWinner>} />
       </Routes>
       ,
     </div>
