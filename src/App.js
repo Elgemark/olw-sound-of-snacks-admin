@@ -31,7 +31,7 @@ function App() {
         <Link to="/songs">List songs</Link> | <Link to="/post-song">Post song</Link>
       </nav>
       <Routes>
-        <Route path="signin" element={<Login uiConfig={initData.uiConfig} />} />
+        <Route path="sign-in" element={<Login uiConfig={initData.uiConfig} />} />
         <Route path="songs" element={<Songs />} />
         <Route path="post-song" element={<PostSong></PostSong>} />
       </Routes>

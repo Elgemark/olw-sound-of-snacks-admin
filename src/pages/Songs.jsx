@@ -74,7 +74,7 @@ const Songs = ({ limit = 20 }) => {
   return (
     <Root>
       <OrderedList>
-        {songs.map((song, index) => (
+        {songs.map((song) => (
           <SongListItem
             key={song.id}
             song={song}
