@@ -19,7 +19,7 @@ export const useGetSongs = ({ skip = 0, limit = 20 }) => {
     getSongs({ limit, fromDoc }).then((documentSnapshots) => {
       const uniqueDocs = _.uniqBy(_.flatten([docs, documentSnapshots.docs]), (doc) => doc.id);
       setDocs(uniqueDocs);
-      setSongs(uniqueDocs.map((doc, index) => ({ id: doc.id, index: index + skip, ...doc.data() })));
+      setSongs(uniqueDocs.map((doc) => ({ id: doc.id, ...doc.data() })));
     });
   }, [limit, skip]);
 
