@@ -32,7 +32,7 @@ export const init = () => {
 
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
-    signInFlow: "popup",
+    // signInFlow: "popup",
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: "/songs",
     // We will display Google and Facebook as auth providers.
@@ -42,9 +42,9 @@ export const init = () => {
   return { app: _app, analytics: _analytics, db: _db, uiConfig };
 };
 
-export const getDocs = async ({ collection, query }) => {
+export const getDocs = async ({ collection, query = [] }) => {
   const _query = fbQuery(fbCollection(_db, collection), ...query);
-  const querySnapshot = await fbGetDocs(query);
+  const querySnapshot = await fbGetDocs(_query);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
@@ -58,4 +58,8 @@ export const addDoc = async ({ collection, data }) => {
 
 export const deleteDoc = async ({ collection, path }) => {
   return await fbDeleteDoc(fbDoc(_db, collection, path));
+};
+
+export const getDb = () => {
+  return _db;
 };

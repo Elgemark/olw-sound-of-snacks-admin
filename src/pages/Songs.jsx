@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { deleteDoc } from "../firebase";
 import styled from "styled-components";
 import _ from "lodash";
-import { getDocs } from "../firebase";
-import { orderBy, limit as fbLimit } from "firebase/firestore";
 import SongListItem from "../components/SongListItem";
+import { useGetSongs } from "../hooks/songs";
 
 const Root = styled.div`
   padding: 1rem;
@@ -43,20 +42,16 @@ const RandomSongItem = ({ song, ...rest }) => {
 const Songs = ({ limit = 20 }) => {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [randomSongIndex, setRandomSongIndex] = useState();
-  const [songs, setSongs] = useState([]);
   const [skip, setSkip] = useState(0);
+  const [fromSong, setFromSong] = useState();
 
-  useEffect(() => {
-    // get songs
-    const query = [fbLimit(limit)];
-    getDocs({ collection: "songs", query }).then((res) => {
-      // getDocs({ collection: "songs" }).then((res) => {
-      setSongs(res);
-    });
-  }, []);
+  const { songs, lastSong } = useGetSongs({ limit, fromSong });
+  console.log("lastSong", lastSong);
 
   const paginate = (value) => {
-    setSkip(skip + value);
+    if (value === "next") {
+      setFromSong(lastSong);
+    }
   };
 
   const onListeItemClickHandler = (songId) => {
@@ -84,7 +79,7 @@ const Songs = ({ limit = 20 }) => {
   return (
     <Root>
       <OrderedList>
-        {songs.slice(skip, skip + limit).map((song, index) => (
+        {songs.map((song, index) => (
           <SongListItem
             key={song.id}
             song={song}
@@ -96,10 +91,10 @@ const Songs = ({ limit = 20 }) => {
       </OrderedList>
       {/* BUTTONS */}
       <Buttons>
-        {skip > 0 && (
+        {fromSong && (
           <button
             onClick={() => {
-              paginate(limit * -1);
+              paginate("previous");
             }}
           >
             {"<< PREVIOUS"}
@@ -110,7 +105,7 @@ const Songs = ({ limit = 20 }) => {
 
         <button
           onClick={() => {
-            paginate(limit);
+            paginate("next");
           }}
         >
           {"NEXT >>"}
