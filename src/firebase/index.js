@@ -1,6 +1,8 @@
-import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+
 import {
   query as fbQuery,
   collection as fbCollection,
@@ -24,15 +26,25 @@ const firebaseConfig = {
 let _app, _analytics, _db;
 
 export const init = () => {
-  _app = initializeApp(firebaseConfig);
+  _app = firebase.initializeApp(firebaseConfig);
   _analytics = getAnalytics(_app);
   _db = getFirestore(_app);
-  return { app: _app, analytics: _analytics, db: _db };
+
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: "popup",
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+    signInSuccessUrl: "/songs",
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+  };
+
+  return { app: _app, analytics: _analytics, db: _db, uiConfig };
 };
 
-export const getDocs = async ({ collection, query = [] }) => {
+export const getDocs = async ({ collection, query }) => {
   const _query = fbQuery(fbCollection(_db, collection), ...query);
-  const querySnapshot = await fbGetDocs(_query);
+  const querySnapshot = await fbGetDocs(query);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
