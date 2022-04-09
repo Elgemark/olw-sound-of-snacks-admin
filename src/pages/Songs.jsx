@@ -43,15 +43,10 @@ const Songs = ({ limit = 20 }) => {
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [randomSongIndex, setRandomSongIndex] = useState();
   const [skip, setSkip] = useState(0);
-  const [fromSong, setFromSong] = useState();
-
-  const { songs, lastSong } = useGetSongs({ limit, fromSong });
-  console.log("lastSong", lastSong);
+  const songs = useGetSongs({ limit, skip });
 
   const paginate = (value) => {
-    if (value === "next") {
-      setFromSong(lastSong);
-    }
+    setSkip(skip + value);
   };
 
   const onListeItemClickHandler = (songId) => {
@@ -83,7 +78,7 @@ const Songs = ({ limit = 20 }) => {
           <SongListItem
             key={song.id}
             song={song}
-            index={skip + index}
+            index={song.index}
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}
           />
@@ -91,10 +86,10 @@ const Songs = ({ limit = 20 }) => {
       </OrderedList>
       {/* BUTTONS */}
       <Buttons>
-        {fromSong && (
+        {skip > 0 && (
           <button
             onClick={() => {
-              paginate("previous");
+              paginate(limit * -1);
             }}
           >
             {"<< PREVIOUS"}
@@ -105,7 +100,7 @@ const Songs = ({ limit = 20 }) => {
 
         <button
           onClick={() => {
-            paginate("next");
+            paginate(limit);
           }}
         >
           {"NEXT >>"}
