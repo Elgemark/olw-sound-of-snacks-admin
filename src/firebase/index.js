@@ -37,6 +37,14 @@ export const init = () => {
     signInSuccessUrl: "/songs",
     // We will display Google and Facebook as auth providers.
     signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+    signInOptions: [
+      {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        disableSignUp: {
+          status: true,
+        },
+      },
+    ],
   };
 
   return { app: _app, analytics: _analytics, db: _db, uiConfig };
