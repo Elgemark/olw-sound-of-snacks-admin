@@ -1,26 +1,27 @@
 import { useState, useEffect } from "react";
 import { collection, query, orderBy, startAfter, limit as fbLimit, getDocs } from "firebase/firestore";
 import { getDb } from "../firebase";
+import _ from "lodash";
 
-const getSongs = async ({ limit, fromSong }) => {
+const getSongs = async ({ limit, fromDoc }) => {
   const defaultQuery = query(collection(getDb(), "songs"), fbLimit(limit));
-  const fromQuery = fromSong && query(collection(getDb(), "songs"), fbLimit(limit), startAfter(fromSong));
+  const fromQuery = fromDoc && query(collection(getDb(), "songs"), fbLimit(limit), startAfter(fromDoc));
   const documentSnapshots = await getDocs(fromQuery || defaultQuery);
-  const lastSong = documentSnapshots.docs[documentSnapshots.docs.length - 1];
-  const songs = documentSnapshots.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  return { songs, lastSong };
+  return documentSnapshots;
 };
 
-export const useGetSongs = ({ fromSong, limit = 20 }) => {
+export const useGetSongs = ({ skip = 0, limit = 20 }) => {
+  const [docs, setDocs] = useState([]);
   const [songs, setSongs] = useState([]);
-  const [lastSong, setLastSong] = useState();
+  const fromDoc = docs[skip - 1];
 
   useEffect(() => {
-    getSongs({ limit, fromSong: lastSong }).then((res) => {
-      setSongs(res.songs);
-      setLastSong(res.lastSong);
+    getSongs({ limit, fromDoc }).then((documentSnapshots) => {
+      const uniqueDocs = _.uniqBy(_.flatten([docs, documentSnapshots.docs]), (doc) => doc.id);
+      setDocs(uniqueDocs);
+      setSongs(uniqueDocs.map((doc, index) => ({ id: doc.id, index: index + skip, ...doc.data() })));
     });
-  }, [limit, fromSong]);
+  }, [limit, skip]);
 
-  return { songs, lastSong };
+  return songs.slice(skip, skip + limit);
 };
