@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { deleteDoc } from "../firebase";
 import styled from "styled-components";
 import _ from "lodash";
@@ -74,11 +74,11 @@ const Songs = ({ limit = 20 }) => {
   return (
     <Root>
       <OrderedList>
-        {songs.map((song) => (
+        {songs.map((song, index) => (
           <SongListItem
             key={song.id}
             song={song}
-            index={song.index}
+            index={index + skip}
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}
           />
@@ -96,15 +96,17 @@ const Songs = ({ limit = 20 }) => {
           </button>
         )}
         {selectedSongs.length ? <button onClick={onDeleteClickHandler}>DELETE</button> : undefined}
-        <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button>
+        {/* <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button> */}
 
-        <button
-          onClick={() => {
-            paginate(limit);
-          }}
-        >
-          {"NEXT >>"}
-        </button>
+        {songs.length === limit && (
+          <button
+            onClick={() => {
+              paginate(limit);
+            }}
+          >
+            {"NEXT >>"}
+          </button>
+        )}
       </Buttons>
       {/* RANDOM */}
       <OrderedList>
