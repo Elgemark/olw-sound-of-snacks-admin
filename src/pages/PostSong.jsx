@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { addDoc } from "../firebase";
+import { addDoc, getDb } from "../firebase";
+import { v4 as uuid } from "uuid";
+import { writeBatch, doc } from "firebase/firestore";
 
 const Root = styled.div`
   padding: 50px;
@@ -28,7 +30,17 @@ const PostSong = () => {
   const [data, setData] = useState("");
 
   const postData = async () => {
-    const res = await addDoc({ collection: "songs", data: { email, alias, data } });
+    const batch = writeBatch(getDb());
+    const id = uuid();
+
+    const songsRef = doc(getDb(), "songs", id);
+    batch.set(songsRef, { alias, data });
+
+    const emailsRef = doc(getDb(), "emails", id);
+    batch.set(emailsRef, { email });
+
+    await batch.commit();
+
     setAlias("");
     setEmail("");
     setData("");
