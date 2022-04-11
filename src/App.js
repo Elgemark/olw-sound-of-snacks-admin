@@ -4,13 +4,16 @@ import "./App.css";
 import { Link, Routes, Route } from "react-router-dom";
 import PostSong from "./pages/PostSong";
 import Songs from "./pages/Songs";
-import { init } from "./firebase";
+import { init, useGetUser } from "./firebase";
 import _ from "lodash";
 import Login from "./pages/Login";
 import SelectWinner from "./pages/SelectWinner";
 
 function App() {
   const [initData, setInitData] = useState();
+  const user = useGetUser({ skip: !initData });
+
+  console.log("user", user);
 
   useEffect(() => {
     // init firebase

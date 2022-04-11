@@ -1,6 +1,7 @@
+import { useState, useEffect } from "react";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 
@@ -72,4 +73,23 @@ export const deleteDoc = async ({ collection, path }) => {
 
 export const getDb = () => {
   return _db;
+};
+
+export const useGetUser = ({ skip = false }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (!skip) {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (_user) => {
+        if (_user) {
+          setUser(_user);
+        } else {
+          setUser(null);
+        }
+      });
+    }
+  }, [skip]);
+
+  return user;
 };

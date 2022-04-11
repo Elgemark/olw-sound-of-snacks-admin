@@ -10,6 +10,9 @@ import { getDb } from "../firebase";
 
 const Root = styled.div`
   padding: 1rem;
+  .button-find-winner {
+    margin-bottom: 1rem;
+  }
 `;
 
 const OrderedList = styled.ol`
@@ -57,18 +60,21 @@ const SelectWinner = () => {
     <Root>
       <input type="date" onChange={onSeletDateHandler} value={date} />
       <h3>{`Week: ${week}, ${songsForWeek.length} songs`}</h3>
-      <p>{`from: ${startOfWeek} to: ${endOfWeek}`}</p>
+      {/* <p>{`from: ${startOfWeek} to: ${endOfWeek}`}</p> */}
       <button
+        className="button-find-winner"
         onClick={() => {
           onFindWinnerClickHandler();
         }}
       >
         FIND A WINNER!
       </button>
+      <h4>Winners:</h4>
       <OrderedList>
         {winnersForWeek.map((winner, index) => (
           <SongListItem
             key={winner.id}
+            checkBox={false}
             index={index}
             alias={winner.alias}
             email={winner.email}
