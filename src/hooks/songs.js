@@ -42,14 +42,11 @@ export const useGetSongs = ({ skip = 0, limit = 20 }) => {
 };
 
 export const useGetSongsForDates = ({ fromDate, toDate }) => {
-  const [docs, setDocs] = useState([]);
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     getSongsForDates({ fromDate, toDate }).then((documentSnapshots) => {
-      const uniqueDocs = _.uniqBy(_.flatten([docs, documentSnapshots.docs]), (doc) => doc.id);
-      setDocs(uniqueDocs);
-      setSongs(uniqueDocs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setSongs(documentSnapshots.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     });
   }, [fromDate, toDate]);
 

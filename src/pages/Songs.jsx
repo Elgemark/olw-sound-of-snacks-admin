@@ -71,7 +71,7 @@ const Songs = ({ limit = 20 }) => {
         {songs.map((song, index) => (
           <SongListItem
             key={song.id}
-            song={song}
+            alias={song.alias}
             index={index + skip}
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}

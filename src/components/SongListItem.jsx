@@ -1,29 +1,39 @@
 import React from "react";
 import styled from "styled-components";
 import Open from "../icons/open";
+import _ from "lodash";
 
 const OpenIcon = styled(Open)`
   height: 20px;
 `;
 
-const SongListItem = styled(({ show = true, checkBox = true, song, index, checked, onChange, onOpen, ...rest }) => (
-  <li key={song.id} index={index} {...rest}>
-    {checkBox && <input type="checkbox" checked={checked} onChange={onChange} />}
-    <span className="num">{`${index + 1}.`}</span>
-    <span className="alias">{song.alias}</span>
-    <OpenIcon className="open-icon" onClick={onOpen} />
-  </li>
-))`
+const SongListItem = styled(
+  ({ show = true, checkBox = true, alias, email, index, checked, onChange, onOpen, ...rest }) => (
+    <li index={index} {...rest}>
+      {checkBox && <input type="checkbox" checked={checked} onChange={onChange} />}
+      {_.isInteger(index) && <span className="num">{`${index + 1}.`}</span>}
+      {alias && <span className="alias">{alias}</span>}
+      {email && <span className="email">{email}</span>}
+      <div className="spacer" />
+      <OpenIcon className="open-icon" onClick={onOpen} />
+    </li>
+  )
+)`
   width: 100%;
+  padding: 0.2rem;
   display: flex;
   background-color: ${({ index, color }) => (color ? color : index % 2 ? "#fff" : "#eee")};
   &:hover {
     background-color: #ffeeff;
   }
+  span {
+    margin-right: 1rem;
+  }
   .num {
     width: 30px;
+    margin-right: 0;
   }
-  .alias {
+  .spacer {
     flex-grow: 1;
   }
 

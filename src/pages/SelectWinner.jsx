@@ -5,7 +5,7 @@ import SongListItem from "../components/SongListItem";
 import styled from "styled-components";
 import { useGetWinners } from "../hooks/winners";
 import _ from "lodash";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getDb } from "../firebase";
 
 const Root = styled.div`
@@ -19,7 +19,7 @@ const OrderedList = styled.ol`
 
 const SelectWinner = () => {
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
-  const [winnerId, setWinnerId] = useState(moment().format("YYYY-MM-DD"));
+  const [winnerId, setWinnerId] = useState();
 
   const week = moment(date).week();
   const startOfWeek = moment(date).startOf("isoWeek").format("YYYY-MM-DD");
@@ -30,34 +30,52 @@ const SelectWinner = () => {
     toDate: endOfWeek,
   });
 
-  const { winners: winnersForWeek, postWinner } = useGetWinners({ week });
-
-  console.log("songsForWeek", { songsForWeek, winnersForWeek });
+  const { winners: winnersForWeek, refetch: refetchWinners } = useGetWinners({ week });
 
   const onSeletDateHandler = (e) => {
     setDate(e.target.value);
   };
 
   const onFindWinnerClickHandler = async () => {
-    const song = songsForWeek[_.random(songsForWeek.length - 1)];
-
+    const winnerIdsForWeek = winnersForWeek.map((winner) => winner.id);
+    // Find song that had not been winning...
+    const songsNotWonForWeek = songsForWeek.filter((song) => !winnerIdsForWeek.includes(song.id));
+    // Find a winner
+    const song = songsNotWonForWeek[_.random(songsNotWonForWeek.length - 1)];
+    //
     const docRef = doc(getDb(), "emails", song.id);
     const emailSnap = getDoc(docRef);
     if ((await emailSnap).exists()) {
-      const email = (await emailSnap).data();
-      debugger;
-      // postWinner(song.id, _.pick(song, "alias", "data"));
-    } else {
-      debugger;
+      const emailData = (await emailSnap).data();
+      await setDoc(doc(getDb(), "winners", song.id), { ...emailData, ...song, week });
+      await refetchWinners();
+      setWinnerId(song.id);
     }
   };
 
   return (
     <Root>
       <input type="date" onChange={onSeletDateHandler} value={date} />
-      <h3>{`Week: ${week}`}</h3>
+      <h3>{`Week: ${week}, ${songsForWeek.length} songs`}</h3>
       <p>{`from: ${startOfWeek} to: ${endOfWeek}`}</p>
-      <button onClick={onFindWinnerClickHandler}>FIND A WINNER!</button>
+      <button
+        onClick={() => {
+          onFindWinnerClickHandler();
+        }}
+      >
+        FIND A WINNER!
+      </button>
+      <OrderedList>
+        {winnersForWeek.map((winner, index) => (
+          <SongListItem
+            key={winner.id}
+            index={index}
+            alias={winner.alias}
+            email={winner.email}
+            color={winner.id === winnerId ? "#aaffaa" : undefined}
+          />
+        ))}
+      </OrderedList>
     </Root>
   );
 };
