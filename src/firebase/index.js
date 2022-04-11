@@ -1,5 +1,6 @@
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 
@@ -30,12 +31,13 @@ export const init = () => {
   _analytics = getAnalytics(_app);
   _db = getFirestore(_app);
 
+  getAuth(_app);
+
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
     // signInFlow: "popup",
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: "/songs",
-    // We will display Google and Facebook as auth providers.
     signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
     signInOptions: [
       {
