@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { addDoc, getDb } from "../firebase";
 import { v4 as uuid } from "uuid";
-import { writeBatch, doc } from "firebase/firestore";
+import { writeBatch, doc, serverTimestamp } from "firebase/firestore";
 
 const Root = styled.div`
   padding: 50px;
@@ -34,7 +34,7 @@ const PostSong = () => {
     const id = uuid();
 
     const songsRef = doc(getDb(), "songs", id);
-    batch.set(songsRef, { alias, data });
+    batch.set(songsRef, { alias, data, servertime: serverTimestamp() });
 
     const emailsRef = doc(getDb(), "emails", id);
     batch.set(emailsRef, { email });

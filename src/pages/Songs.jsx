@@ -12,12 +12,6 @@ const Root = styled.div`
 const OrderedList = styled.ol`
   margin-bottom: 1rem;
   text-align: left;
-  .num {
-    font-weight: bold;
-  }
-  .alias {
-    font-weight: bold;
-  }
 `;
 
 const Buttons = styled.div`
