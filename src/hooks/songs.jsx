@@ -15,12 +15,11 @@ const getSongs = async ({ limit, fromDoc }) => {
 const getSongsForDates = async ({ fromDate, toDate }) => {
   const defaultQuery = query(
     collection(getDb(), "songs"),
-    fbWhere("servertime", ">=", fromDate),
-    fbWhere("servertime", "<=", toDate)
+    fbWhere("servertime", ">=", new Date(fromDate)),
+    fbWhere("servertime", "<=", new Date(toDate))
   );
 
   const documentSnapshots = await getDocs(defaultQuery);
-  console.log({ documentSnapshots, fromDate, toDate });
   return documentSnapshots;
 };
 

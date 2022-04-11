@@ -21,8 +21,8 @@ const SelectWinner = () => {
   const endOfWeek = moment(date).endOf("isoWeek").format("YYYY-MM-DD");
 
   const songsForWeek = useGetSongsForDates({
-    fromDate: moment(startOfWeek).toISOString(),
-    toDate: moment(endOfWeek).toISOString(),
+    fromDate: startOfWeek,
+    toDate: endOfWeek,
   });
 
   console.log("songsForWeek", songsForWeek);
