@@ -75,8 +75,9 @@ export const getDb = () => {
   return _db;
 };
 
-export const useGetUser = ({ skip = false }) => {
+export const useGetUser = ({ skip = false } = {}) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!skip) {
@@ -87,9 +88,10 @@ export const useGetUser = ({ skip = false }) => {
         } else {
           setUser(null);
         }
+        setIsLoading(false);
       });
     }
   }, [skip]);
 
-  return user;
+  return { user, isLoading };
 };
