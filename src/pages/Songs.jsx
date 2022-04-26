@@ -4,6 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import SongListItem from "../components/SongListItem";
 import { useGetSongs } from "../hooks/songs";
+import moment from "moment";
 
 const Root = styled.div`
   padding: 1rem;
@@ -53,11 +54,6 @@ const Songs = ({ limit = 20 }) => {
     setSelectedSongs(updatedSongs);
   };
 
-  const onSelectRandomClickHandler = () => {
-    const randomIndex = _.random(0, songs.length - 1);
-    setRandomSongIndex(randomIndex);
-  };
-
   const onDeleteClickHandler = () => {
     const promises = selectedSongs.map((songId) => deleteDoc({ collection: "songs", path: songId }));
     Promise.all(promises).then(() => {
@@ -72,6 +68,7 @@ const Songs = ({ limit = 20 }) => {
           <SongListItem
             key={song.id}
             alias={song.alias}
+            date={song.servertime && moment.utc(song?.servertime?.seconds * 1000).format("YYYY:MM:DD HH:mm")}
             index={index + skip}
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}
