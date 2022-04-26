@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react";
-import { collection, query, startAfter, limit as fbLimit, getDocs, where as fbWhere } from "firebase/firestore";
+import {
+  collection,
+  query,
+  startAfter,
+  orderBy,
+  limit as fbLimit,
+  getDocs,
+  where as fbWhere,
+} from "firebase/firestore";
 import { getDb } from "../firebase";
 import _ from "lodash";
 
 // HELPERS
 
 const getSongs = async ({ limit, fromDoc }) => {
-  const defaultQuery = query(collection(getDb(), "songs"), fbLimit(limit));
-  const fromQuery = fromDoc && query(collection(getDb(), "songs"), fbLimit(limit), startAfter(fromDoc));
+  const order = orderBy("servertime", "desc");
+  const defaultQuery = query(collection(getDb(), "songs"), order, fbLimit(limit));
+  const fromQuery = fromDoc && query(collection(getDb(), "songs"), order, fbLimit(limit), startAfter(fromDoc));
   const documentSnapshots = await getDocs(fromQuery || defaultQuery);
   return documentSnapshots;
 };
