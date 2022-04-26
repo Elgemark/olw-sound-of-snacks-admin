@@ -8,13 +8,28 @@ const OpenIcon = styled(Open)`
 `;
 
 const SongListItem = styled(
-  ({ show = true, checkBox = true, alias, date, email, index, checked, onChange, onOpen, ...rest }) => (
+  ({
+    show = true,
+    checkBox = true,
+    alias,
+    date,
+    email,
+    firstName,
+    lastName,
+    index,
+    checked,
+    onChange,
+    onOpen,
+    ...rest
+  }) => (
     <li index={index} {...rest}>
       {checkBox && <input type="checkbox" checked={checked} onChange={onChange} />}
       {_.isInteger(index) && <span className="num">{`${index + 1}.`}</span>}
       {alias && <span className="alias">{alias}</span>}
       {email && <span className="email">{email}</span>}
       {date && <span className="date">{date}</span>}
+      {firstName && <span className="date">{firstName}</span>}
+      {lastName && <span className="date">{lastName}</span>}
       <div className="spacer" />
       <OpenIcon className="open-icon" onClick={onOpen} />
     </li>

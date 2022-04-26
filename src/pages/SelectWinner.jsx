@@ -78,6 +78,8 @@ const SelectWinner = () => {
             index={index}
             alias={winner.alias}
             email={winner.email}
+            firstName={winner.firstName}
+            lastName={winner.lastName}
             date={winner.servertime && moment.utc(winner?.servertime?.seconds * 1000).format("YYYY:MM:DD HH:mm")}
             color={winner.id === winnerId ? "#aaffaa" : undefined}
           />
