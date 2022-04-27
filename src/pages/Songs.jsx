@@ -72,6 +72,9 @@ const Songs = ({ limit = 20 }) => {
             index={index + skip}
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}
+            onOpen={() => {
+              window.open(`/?id=${song.data}`, "_blank");
+            }}
           />
         ))}
       </OrderedList>
@@ -86,7 +89,11 @@ const Songs = ({ limit = 20 }) => {
             {"<< PREVIOUS"}
           </button>
         )}
-        {selectedSongs.length ? <button onClick={onDeleteClickHandler}>DELETE</button> : undefined}
+        {selectedSongs.length ? (
+          <button className="delete" onClick={onDeleteClickHandler}>
+            DELETE
+          </button>
+        ) : undefined}
         {/* <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button> */}
 
         {songs.length === limit && (

@@ -31,16 +31,18 @@ const SongListItem = styled(
       {firstName && <span className="date">{firstName}</span>}
       {lastName && <span className="date">{lastName}</span>}
       <div className="spacer" />
-      <OpenIcon className="open-icon" onClick={onOpen} />
+      <OpenIcon className="open-icon" onClick={onOpen} style={{ fill: "white" }} />
     </li>
   )
 )`
   width: 100%;
   padding: 0.2rem;
   display: flex;
-  background-color: ${({ index, color }) => (color ? color : index % 2 ? "#fff" : "#eee")};
+  color: white;
+  background-color: ${({ index, color }) =>
+    color ? color : index % 2 ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)"};
   &:hover {
-    background-color: #ffeeff;
+    background-color: rgba(0, 0, 0, 0.4);
   }
   span {
     margin-right: 1rem;

@@ -82,6 +82,9 @@ const SelectWinner = () => {
             lastName={winner.lastName}
             date={winner.servertime && moment.utc(winner?.servertime?.seconds * 1000).format("YYYY:MM:DD HH:mm")}
             color={winner.id === winnerId ? "#aaffaa" : undefined}
+            onOpen={() => {
+              window.open(`/?id=${winner.data}`, "_blank");
+            }}
           />
         ))}
       </OrderedList>
