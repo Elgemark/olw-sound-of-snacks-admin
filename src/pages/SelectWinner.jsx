@@ -78,7 +78,7 @@ const SelectWinner = () => {
           onFindWinnerClickHandler();
         }}
       >
-        FIND A WINNER!
+        Find a winner!
       </button>
       <h4>{`Week: ${week}, ${songsForWeek.length} songs, ${winnersForWeek.length} winners`}</h4>
       <OrderedList>

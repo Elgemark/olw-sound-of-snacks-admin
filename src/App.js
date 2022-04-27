@@ -22,6 +22,16 @@ const Navigation = styled.div`
   }
 `;
 
+const Crowd = styled.div`
+  z-index: 20;
+  position: fixed;
+  width: 100%;
+  min-width: 600px;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
 function App() {
   const [initData, setInitData] = useState();
 
@@ -53,6 +63,9 @@ function App() {
           <Route path="select-winner" element={<SelectWinner></SelectWinner>} />
         </Routes>
       </SignIn>
+      <Crowd>
+        <img className="logo" src="./assets/crowd.svg" />
+      </Crowd>
     </div>
   );
 }

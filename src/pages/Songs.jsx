@@ -77,7 +77,7 @@ const Songs = ({ limit = 20 }) => {
               paginate(limit * -1);
             }}
           >
-            {"PREVIOUS"}
+            {"Previous"}
           </button>
         )}
         {selectedSongs.length ? (
@@ -91,7 +91,7 @@ const Songs = ({ limit = 20 }) => {
               paginate(limit);
             }}
           >
-            {"NEXT"}
+            {"Next"}
           </button>
         )}
       </Buttons>
