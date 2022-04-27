@@ -19,24 +19,15 @@ const Buttons = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-top: 2rem;
   button {
     margin-left: 4px;
     margin-right: 4px;
   }
 `;
 
-const RandomSongItem = ({ song, ...rest }) => {
-  if (song) {
-    return <SongListItem song={song} {...rest} />;
-  } else {
-    return <React.Fragment />;
-  }
-};
-
 const Songs = ({ limit = 20 }) => {
   const [selectedSongs, setSelectedSongs] = useState([]);
-  const [randomSongIndex, setRandomSongIndex] = useState();
   const [skip, setSkip] = useState(0);
   const songs = useGetSongs({ limit, skip });
 
@@ -73,7 +64,7 @@ const Songs = ({ limit = 20 }) => {
             checked={selectedSongs.includes(song.id)}
             onChange={() => onListeItemClickHandler(song.id)}
             onOpen={() => {
-              window.open(`/?id=${song.data}`, "_blank");
+              window.open(`/player.html?song=${song.id}`, "_blank");
             }}
           />
         ))}
@@ -86,7 +77,7 @@ const Songs = ({ limit = 20 }) => {
               paginate(limit * -1);
             }}
           >
-            {"<< PREVIOUS"}
+            {"PREVIOUS"}
           </button>
         )}
         {selectedSongs.length ? (
@@ -94,22 +85,16 @@ const Songs = ({ limit = 20 }) => {
             DELETE
           </button>
         ) : undefined}
-        {/* <button onClick={onSelectRandomClickHandler}>SELECT RANDOM</button> */}
-
         {songs.length === limit && (
           <button
             onClick={() => {
               paginate(limit);
             }}
           >
-            {"NEXT >>"}
+            {"NEXT"}
           </button>
         )}
       </Buttons>
-      {/* RANDOM */}
-      <OrderedList>
-        <RandomSongItem checkBox={false} color="#eee" song={songs[randomSongIndex]} index={randomSongIndex} />
-      </OrderedList>
     </Root>
   );
 };

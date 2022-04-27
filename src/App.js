@@ -4,10 +4,23 @@ import "./App.css";
 import { Link, Routes, Route } from "react-router-dom";
 import PostSong from "./pages/PostSong";
 import Songs from "./pages/Songs";
-import { init, useGetUser } from "./firebase";
-import _ from "lodash";
+import { init } from "./firebase";
 import SignIn from "./pages/SignIn";
 import SelectWinner from "./pages/SelectWinner";
+import styled from "styled-components";
+
+const Navigation = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+  .logo {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+  }
+`;
 
 function App() {
   const [initData, setInitData] = useState();
@@ -24,18 +37,15 @@ function App() {
   return (
     <div className="App">
       <SignIn uiConfig={initData.uiConfig}>
-        <nav
-          style={{
-            borderBottom: "solid 1px",
-            paddingBottom: "1rem",
-          }}
-        >
-          <Link to="/songs">List songs</Link>
-          {" | "}
-          <Link to="/post-song">Post song</Link>
-          {" | "}
-          <Link to="/select-winner">Select winner</Link>
-        </nav>
+        <Navigation>
+          <img className="logo" src="./assets/logo.png" width={"70px"} height={"70px"} />
+          <nav>
+            <Link to="/songs">List songs</Link>
+            {/* <Link to="/post-song">Post song</Link> */}
+            {" | "}
+            <Link to="/select-winner">Select winner</Link>
+          </nav>
+        </Navigation>
         <Routes>
           <Route path="/" element={<Songs />} />
           <Route path="songs" element={<Songs />} />

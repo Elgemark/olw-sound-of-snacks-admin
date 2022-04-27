@@ -9,8 +9,20 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getDb } from "../firebase";
 
 const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1rem;
   .button-find-winner {
+    margin-bottom: 2rem;
+  }
+  input {
+    background: transparent;
+    min-width: 210px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    color: white;
     margin-bottom: 1rem;
   }
 `;
@@ -18,6 +30,7 @@ const Root = styled.div`
 const OrderedList = styled.ol`
   margin-bottom: 1rem;
   text-align: left;
+  width: 100%;
 `;
 
 const SelectWinner = () => {
@@ -59,8 +72,6 @@ const SelectWinner = () => {
   return (
     <Root>
       <input type="date" onChange={onSeletDateHandler} value={date} />
-      <h3>{`Week: ${week}, ${songsForWeek.length} songs`}</h3>
-      {/* <p>{`from: ${startOfWeek} to: ${endOfWeek}`}</p> */}
       <button
         className="button-find-winner"
         onClick={() => {
@@ -69,7 +80,7 @@ const SelectWinner = () => {
       >
         FIND A WINNER!
       </button>
-      <h4>Winners:</h4>
+      <h4>{`Week: ${week}, ${songsForWeek.length} songs, ${winnersForWeek.length} winners`}</h4>
       <OrderedList>
         {winnersForWeek.map((winner, index) => (
           <SongListItem
@@ -81,9 +92,9 @@ const SelectWinner = () => {
             firstName={winner.firstName}
             lastName={winner.lastName}
             date={winner.servertime && moment.utc(winner?.servertime?.seconds * 1000).format("YYYY:MM:DD HH:mm")}
-            color={winner.id === winnerId ? "#aaffaa" : undefined}
+            color={winner.id === winnerId ? "#0f9f4b" : undefined}
             onOpen={() => {
-              window.open(`/?id=${winner.data}`, "_blank");
+              window.open(`/player.html?song=${winner.id}`, "_blank");
             }}
           />
         ))}

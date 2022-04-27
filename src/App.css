@@ -1,5 +1,11 @@
 .App {
   text-align: center;
+  color: white;
+  font-size: 16px;
+}
+
+nav {
+  margin: 1rem;
 }
 
 ol {
@@ -22,7 +28,7 @@ button {
   letter-spacing: 0;
   line-height: 60px;
   text-decoration: none;
-  font-size: 30px;
+  font-weight: 700;
   box-sizing: unset;
   opacity: 1;
   padding: 0 20px;
@@ -76,15 +82,6 @@ button.high {
 button.margins {
   max-width: 240px;
   margin: 20px auto 20px auto;
-}
-
-input[type="date" i] {
-  background: transparent;
-  /* padding: 10px; */
-  min-width: 210px;
-  font-size: 27px;
-  border: none;
-  color: white;
 }
 
 ::-webkit-calendar-picker-indicator {

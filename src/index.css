@@ -2,10 +2,14 @@ body {
   margin: 0;
   height: 100%;
   font-family: Sharp, sans-serif;
+  text-rendering: geometricPrecision;
   letter-spacing: 0.01em;
   color: #006eae;
   user-select: none;
   background-color: #006eae;
+  background-image: url("./assets/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 code {
