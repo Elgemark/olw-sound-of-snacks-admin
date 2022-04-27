@@ -38,8 +38,7 @@ export const init = () => {
     // Popup signin flow rather than redirect flow.
     // signInFlow: "popup",
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: "/songs",
-    signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+    signInSuccessUrl: "/admin",
     signInOptions: [
       {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
