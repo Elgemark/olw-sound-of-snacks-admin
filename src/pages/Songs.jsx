@@ -82,7 +82,7 @@ const Songs = ({ limit = 20 }) => {
         )}
         {selectedSongs.length ? (
           <button className="delete" onClick={onDeleteClickHandler}>
-            DELETE
+            Delete
           </button>
         ) : undefined}
         {songs.length === limit && (

@@ -23,7 +23,7 @@ const Navigation = styled.div`
 `;
 
 const Crowd = styled.div`
-  z-index: 20;
+  z-index: -1;
   position: fixed;
   width: 100%;
   min-width: 600px;
@@ -46,6 +46,9 @@ function App() {
 
   return (
     <div className="App">
+      <Crowd>
+        <img className="logo" src="./assets/crowd.svg" />
+      </Crowd>
       <SignIn uiConfig={initData.uiConfig}>
         <Navigation>
           <img className="logo" src="./assets/logo.png" width={"70px"} height={"70px"} />
@@ -63,9 +66,6 @@ function App() {
           <Route path="select-winner" element={<SelectWinner></SelectWinner>} />
         </Routes>
       </SignIn>
-      <Crowd>
-        <img className="logo" src="./assets/crowd.svg" />
-      </Crowd>
     </div>
   );
 }

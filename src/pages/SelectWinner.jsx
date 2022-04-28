@@ -16,7 +16,7 @@ const Root = styled.div`
   .button-find-winner {
     margin-bottom: 2rem;
   }
-  input {
+  .date-picker {
     background: transparent;
     min-width: 210px;
     font-size: 16px;
@@ -36,6 +36,7 @@ const OrderedList = styled.ol`
 const SelectWinner = () => {
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [winnerId, setWinnerId] = useState();
+  const [selectedWinners, setSelectedWinners] = useState([]);
 
   const week = moment(date).week();
   const startOfWeek = moment(date).startOf("isoWeek").format("YYYY-MM-DD");
@@ -46,7 +47,7 @@ const SelectWinner = () => {
     toDate: endOfWeek,
   });
 
-  const { winners: winnersForWeek, refetch: refetchWinners } = useGetWinners({ week });
+  const { winners: winnersForWeek, refetch: refetchWinners, revoke: revokeWinners } = useGetWinners({ week });
 
   const onSeletDateHandler = (e) => {
     setDate(e.target.value);
@@ -63,15 +64,32 @@ const SelectWinner = () => {
     const emailSnap = getDoc(docRef);
     if ((await emailSnap).exists()) {
       const emailData = (await emailSnap).data();
-      await setDoc(doc(getDb(), "winners", song.id), { ...emailData, ...song, week });
+      await setDoc(doc(getDb(), "winners", song.id), { ...emailData, ...song, week, revoked: false });
       await refetchWinners();
       setWinnerId(song.id);
     }
   };
 
+  const onListeItemClickHandler = (songId) => {
+    const updatedSongs = [...selectedWinners];
+    if (updatedSongs.includes(songId)) {
+      _.remove(updatedSongs, (id) => id === songId);
+    } else {
+      updatedSongs.push(songId);
+    }
+    setSelectedWinners(updatedSongs);
+  };
+
+  const onRevokeClickHandler = () => {
+    revokeWinners(selectedWinners).then(() => {
+      setSelectedWinners([]);
+      refetchWinners();
+    });
+  };
+
   return (
     <Root>
-      <input type="date" onChange={onSeletDateHandler} value={date} />
+      <input className="date-picker" type="date" onChange={onSeletDateHandler} value={date} />
       <button
         className="button-find-winner"
         onClick={() => {
@@ -85,7 +103,8 @@ const SelectWinner = () => {
         {winnersForWeek.map((winner, index) => (
           <SongListItem
             key={winner.id}
-            checkBox={false}
+            checked={selectedWinners.includes(winner.id)}
+            onChange={() => onListeItemClickHandler(winner.id)}
             index={index}
             alias={winner.alias}
             email={winner.email}
@@ -99,6 +118,11 @@ const SelectWinner = () => {
           />
         ))}
       </OrderedList>
+      {selectedWinners.length ? (
+        <button className="delete" onClick={onRevokeClickHandler}>
+          Revoke
+        </button>
+      ) : undefined}
     </Root>
   );
 };
