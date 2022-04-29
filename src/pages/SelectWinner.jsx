@@ -23,7 +23,7 @@ const Root = styled.div`
     font-weight: bold;
     border: none;
     color: white;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
   }
 `;
 
@@ -89,6 +89,7 @@ const SelectWinner = () => {
 
   return (
     <Root>
+      <h2>Select week</h2>
       <input className="date-picker" type="date" onChange={onSeletDateHandler} value={date} />
       <button
         className="button-find-winner"
@@ -96,9 +97,9 @@ const SelectWinner = () => {
           onFindWinnerClickHandler();
         }}
       >
-        Find a winner!
+        Pick a winner!
       </button>
-      <h4>{`Week: ${week}, ${songsForWeek.length} songs, ${winnersForWeek.length} winners`}</h4>
+      <h2>{`Week: ${week}, ${songsForWeek.length} submissions, ${winnersForWeek.length} winners`}</h2>
       <OrderedList>
         {winnersForWeek.map((winner, index) => (
           <SongListItem

@@ -53,10 +53,10 @@ function App() {
         <Navigation>
           <img className="logo" src="./assets/logo.png" width={"70px"} height={"70px"} />
           <nav>
-            <Link to="/songs">List songs</Link>
+            <Link to="/songs">Submissions</Link>
             {/* <Link to="/post-song">Post song</Link> */}
             {" | "}
-            <Link to="/select-winner">Select winner</Link>
+            <Link to="/select-winner">Select Winners</Link>
           </nav>
         </Navigation>
         <Routes>
